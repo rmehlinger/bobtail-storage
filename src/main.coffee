@@ -62,12 +62,12 @@ storageMapObject = (storageType) ->
       storageMap.put key, newValue
       writeGuard = false
 
-  rx.autoSub storageMap.onAdd, (dict) ->
-    if not writeGuard then _.pairs(dict).forEach ([k, n]) -> windowStorage.setItem k, n
-  rx.autoSub storageMap.onChange, (dict) ->
-    if not writeGuard then _.pairs(dict).forEach ([k, [o, n]]) -> windowStorage.setItem k, n
-  rx.autoSub storageMap.onRemove, (dict) ->
-    _.keys(dict).forEach (k) -> windowStorage.removeItem k
+  rx.autoSub storageMap.onAdd, (map) ->
+    if not writeGuard then map.forEach (n, k) ->
+      windowStorage.setItem k, n
+  rx.autoSub storageMap.onChange, (map) ->
+    if not writeGuard then map.forEach ([o, n], k) -> windowStorage.setItem k, n
+  rx.autoSub storageMap.onRemove, (map) -> map.forEach (v, k) -> windowStorage.removeItem k
 
   # necessary because SrcMap objects do not permit deleting nonexistent keys.
   _safeRemove = (k) ->
@@ -92,7 +92,6 @@ storageMapObject = (storageType) ->
       if o != v
         if o is undefined or getType(o).name != getType(v)?.name then _removeItem k
         type = getType v
-        if v is null then console.log type.prefixFunc(k), type.serialize(v)
         storageMap.put type.prefixFunc(k), type.serialize(v)
 
   return {

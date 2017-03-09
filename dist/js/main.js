@@ -127,26 +127,24 @@
         return writeGuard = false;
       }
     });
-    rx.autoSub(storageMap.onAdd, function(dict) {
+    rx.autoSub(storageMap.onAdd, function(map) {
       if (!writeGuard) {
-        return _.pairs(dict).forEach(function(arg) {
-          var k, n;
-          k = arg[0], n = arg[1];
+        return map.forEach(function(n, k) {
           return windowStorage.setItem(k, n);
         });
       }
     });
-    rx.autoSub(storageMap.onChange, function(dict) {
+    rx.autoSub(storageMap.onChange, function(map) {
       if (!writeGuard) {
-        return _.pairs(dict).forEach(function(arg) {
-          var k, n, o, ref;
-          k = arg[0], (ref = arg[1], o = ref[0], n = ref[1]);
+        return map.forEach(function(arg, k) {
+          var n, o;
+          o = arg[0], n = arg[1];
           return windowStorage.setItem(k, n);
         });
       }
     });
-    rx.autoSub(storageMap.onRemove, function(dict) {
-      return _.keys(dict).forEach(function(k) {
+    rx.autoSub(storageMap.onRemove, function(map) {
+      return map.forEach(function(v, k) {
         return windowStorage.removeItem(k);
       });
     });
@@ -185,9 +183,6 @@
               _removeItem(k);
             }
             type = getType(v);
-            if (v === null) {
-              console.log(type.prefixFunc(k), type.serialize(v));
-            }
             return storageMap.put(type.prefixFunc(k), type.serialize(v));
           }
         });

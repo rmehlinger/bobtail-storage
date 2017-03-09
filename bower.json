@@ -1,11 +1,11 @@
 {
   "name": "bobtail-storage",
-  "version": "0.4.2",
   "authors": [
     "Richard Mehlinger <rmehlinger@gmail.com>"
   ],
   "description": "A package integrating reactive-coffee with HTML5 session and local storage.",
   "main": "main.coffee",
+  "version": "0.5.0",
   "moduleType": [],
   "keywords": [
     "storage",
@@ -23,9 +23,7 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "bobtail": "^1.4.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "qunit": "~1.20.0"
   }
